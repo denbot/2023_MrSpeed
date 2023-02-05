@@ -5,10 +5,10 @@
 2. Install pipenv:
 	1. `pip3 install pipenv`
 	2. sudo alternative ## Not recommended unless pipenv fails to install without it
-3. Clone the [2023_MrSpeed](https://github.com/Angelbots1339/2023_MrSpeed)
-	1. HTTPS - `https://github.com/Angelbots1339/2023_MrSpeed.git`
-	2. SSH - `git@github.com:Angelbots1339/2023_MrSpeed.git`
-	3. GitHub CLI - `gh repo clone Angelbots1339/2023_MrSpeed` ## Recommended
+3. Clone the [2023_MrSpeed](https://github.com/Angelbots1339/2023_MrSpeed) repository
+	1. GitHub CLI - `gh repo clone Angelbots1339/2023_MrSpeed` ## Recommended
+	2. HTTPS - `https://github.com/Angelbots1339/2023_MrSpeed.git`
+	3. SSH - `git@github.com:Angelbots1339/2023_MrSpeed.git`
 4. `cd 2023_MrSpeed`
 5. `pipenv install --ignore-pipfile`
 
@@ -23,11 +23,11 @@
 3. Iterate through your code changes and validate functionality in the simulator before proceeding
 4. `git add .`
 5. `git commit -m "Your _detailed_ commit message"`
-6. `git push origin [YourName_BranchTitle]
+6. `git push origin [YourName_BranchTitle]`
 7. Create a pull request
-	1. `gh pr create` ## Requires installation of `gh` Github's command line utility
+	```gh pr create` ## Requires installation of `gh` Github's command line utility```
 	or
-	2. From the github.com branch page, follow the instructions to submit your pull request into 'main'
+	From the github.com branch page, follow the instructions to submit your pull request into 'main'
 8. Ask one of your peers to review your pull request and merge if they approve
 
 ### Post-Merge repository syncronization
