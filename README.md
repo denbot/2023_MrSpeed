@@ -15,6 +15,7 @@
 ### Rio First Time Setup
 1. `cd rioSetup`
 2. `./rioSetup.sh [Radio SSID]`
+[![demo](https://asciinema.org/a/557437.svg)](https://asciinema.org/a/557437?autoplay=1)
 
 ### Branching Strategy (main is a protected branch)
 1. `git checkout -b [YourName_BranchTitle]`
@@ -36,3 +37,6 @@
 4. `git branch -d [YourName_BranchTitle]`
 
 ### Deploy your code to the rio
+1. `cd deploy`
+2. `python3 robot.py deploy`
+[![demo](https://asciinema.org/a/557439.svg)](https://asciinema.org/a/557439?autoplay=1)
