@@ -1,0 +1,55 @@
+{
+  "HALProvider": {
+    "Timing": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "Robot": {
+          "arrowColor": [
+            0.40664058923721313,
+            0.09260860085487366,
+            0.46078431606292725,
+            255.0
+          ],
+          "color": [
+            0.12604515254497528,
+            0.02818627655506134,
+            0.25,
+            255.0
+          ],
+          "width": 0.8199999928474426
+        },
+        "image": "./FieldImage.png",
+        "width": 16.5,
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "FMSInfo": {
+        "open": true
+      },
+      "LiveWindow": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      }
+    }
+  },
+  "NetworkTables View": {
+    "visible": false
+  }
+}
