@@ -26,9 +26,10 @@
             0.25,
             255.0
           ],
+          "image": "./mario.png",
           "width": 0.8199999928474426
         },
-        "image": "./FieldImage.png",
+        "image": "./PlayingField.png",
         "width": 16.5,
         "window": {
           "visible": true
