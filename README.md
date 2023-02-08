@@ -29,6 +29,17 @@
 	From the github.com branch page, follow the instructions to submit your pull request into 'main'
 7. Ask one of your peers to review your pull request and merge if they approve
 
+### Review Pull Requests
+1. `gh pr list`
+2. `gh pr checkout [pull request number]`
+3. Review the code
+4. Approve _or_ Request Changes:
+	1. `gh pr review --approve`
+	2. `gh pr review [pull request number] --request-changes -b "[your reason for requesting changes]"`
+
+### Merge Pull Request
+1. `gh pr merge [pull request number]`
+
 ### Post-Merge repository syncronization
 1. `git checkout main`
 2. `git fetch origin`
