@@ -18,6 +18,7 @@
 [![demo](https://asciinema.org/a/557437.svg)](https://asciinema.org/a/557437?autoplay=1)
 
 ### Branching Strategy (main is a protected branch)
+Starting from the `main` branch...
 1. `git checkout -b [YourName_BranchTitle]`
 2. Iterate through your code changes and validate functionality in the simulator before proceeding
 3. `git add .`
@@ -27,7 +28,7 @@
 	```gh pr create` ## Requires installation of `gh` Github's command line utility```
 	or
 	From the github.com branch page, follow the instructions to submit your pull request into 'main'
-7. Ask one of your peers to review your pull request and merge if they approve
+8. Ask one of your peers to review your pull request and merge after they approve
 
 ### Review Pull Requests
 1. `gh pr list`
@@ -40,13 +41,12 @@
 ### Merge Pull Request
 1. `gh pr merge [pull request number]`
 
-### Post-Merge repository syncronization
+### Post-Merge branch cleanup
 1. `git checkout main`
-2. `git fetch origin`
-3. `git merge origin/main`
+2. `git pull`
 4. `git branch -d [YourName_BranchTitle]`
 
 ### Deploy your code to the rio
-1. `cd deploy`
+1. `cd src`
 2. `python3 robot.py deploy`
 [![demo](https://asciinema.org/a/557439.svg)](https://asciinema.org/a/557439?autoplay=1)
