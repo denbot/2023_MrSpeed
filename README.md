@@ -20,16 +20,26 @@
 ### Branching Strategy (main is a protected branch)
 Starting from the `main` branch...
 1. `git checkout -b [YourName_BranchTitle]`
-2. `git checkout [YourName_BranchTitle]`
-3. Iterate through your code changes and validate functionality in the simulator before proceeding
-4. `git add .`
-5. `git commit -m "Your _detailed_ commit message"`
-6. `git push origin [YourName_BranchTitle]`
-7. Create a pull request
+2. Iterate through your code changes and validate functionality in the simulator before proceeding
+3. `git add .`
+4. `git commit -m "Your _detailed_ commit message"`
+5. `git push origin [YourName_BranchTitle]`
+6. Create a pull request
 	```gh pr create` ## Requires installation of `gh` Github's command line utility```
 	or
 	From the github.com branch page, follow the instructions to submit your pull request into 'main'
 8. Ask one of your peers to review your pull request and merge after they approve
+
+### Review Pull Requests
+1. `gh pr list`
+2. `gh pr checkout [pull request number]`
+3. Review the code
+4. Approve _or_ Request Changes:
+	1. `gh pr review --approve`
+	2. `gh pr review [pull request number] --request-changes -b "[your reason for requesting changes]"`
+
+### Merge Pull Request
+1. `gh pr merge [pull request number]`
 
 ### Post-Merge branch cleanup
 1. `git checkout main`
