@@ -13,6 +13,8 @@ from wpilib.drive import DifferentialDrive
 
 class Robot(wpilib.TimedRobot):
     def robotInit(self):
+        print("Testing init with print")
+        print(dir(wpilib))
         self.leftLeadMotor = rev.CANSparkMax(10, rev.CANSparkMax.MotorType.kBrushless)
         self.rightLeadMotor = rev.CANSparkMax(40, rev.CANSparkMax.MotorType.kBrushless)
         self.leftFollowMotor = rev.CANSparkMax(20, rev.CANSparkMax.MotorType.kBrushless)
@@ -22,7 +24,7 @@ class Robot(wpilib.TimedRobot):
         # commmands sent to the lead motors to be sent to the follower motors.
         self.driveTrain = DifferentialDrive(self.leftLeadMotor, self.rightLeadMotor)
         self.joystick = wpilib.Joystick(0)
-        
+
         # The RestoreFactoryDefaults method can be used to reset the
         # configuration parameters in the SPARK MAX to their factory default
         # state. If no argument is passed, these parameters will not persist
@@ -43,7 +45,9 @@ class Robot(wpilib.TimedRobot):
 
     def teleopPeriodic(self):
         # Drive with arcade style
-        self.driveTrain.arcadeDrive(self.joystick.getX() / 3, self.joystick.getY() / 3)
+        # print(self.joystick.getRawAxis(0), self.joystick.getX(), self.joystick.getRawAxis(1), self.joystick.getY())
+        self.driveTrain.arcadeDrive(self.joystick.getX() / 2, self.joystick.getY() / 2)
+
 
 if __name__ == "__main__":
     wpilib.run(Robot)

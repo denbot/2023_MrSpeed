@@ -8,12 +8,21 @@
 # on after that period of time. This can help you do more complex simulations
 # of your robot code without too much extra effort.
 #
+import inspect
+import traceback
+import typing
 
 import wpilib.simulation
 
 from pyfrc.physics.core import PhysicsInterface
 from pyfrc.physics import motor_cfgs, tankmodel
 from pyfrc.physics.units import units
+from wpimath._controls._controls.plant import LinearSystemId, DCMotor
+
+import constants
+
+if typing.TYPE_CHECKING:
+    from src.robot import Robot
 
 
 class PhysicsEngine:
@@ -23,13 +32,16 @@ class PhysicsEngine:
     realistic, but it's good enough to illustrate the point
     """
 
-    def __init__(self, physics_controller: PhysicsInterface):
-
+    def __init__(self, physics_controller: PhysicsInterface, robot: "Robot"):
         self.physics_controller = physics_controller
 
+        # Joystick
+        self.joystick = wpilib.simulation.JoystickSim(robot.joystick)
+
         # Motors
-        self.l_motor = wpilib.simulation.PWMSim(0)
-        self.r_motor = wpilib.simulation.PWMSim(2)
+        self.l_motor = wpilib.simulation.PWMSim(10)
+        self.r_motor = wpilib.simulation.PWMSim(40)
+        self.l_motor_sim = wpilib.simulation.DCMotorSim(DCMotor.NEO(), 0.25, 0.00005)
 
         self.dio1 = wpilib.simulation.DIOSim(1)
         self.dio2 = wpilib.simulation.DIOSim(2)
@@ -44,17 +56,25 @@ class PhysicsEngine:
 
         # Change these parameters to fit your robot!
         bumper_width = 2.75 * units.inch
+        # self.drivetrain = robot.driveTrain
 
         # fmt: off
-        self.drivetrain = tankmodel.TankModel.theory(
-            motor_cfgs.MOTOR_CFG_CIM,           # motor configuration
-            116 * units.lbs,                    # robot mass
-            10.71,                              # drivetrain gear ratio
-            2,                                  # motors per side
-            5 * units.inch,                    # robot wheelbase
-            16 * units.inch + bumper_width * 2, # robot width
-            17 * units.inch + bumper_width * 2, # robot length
-            5 * units.inch,                     # wheel diameter
+        system = LinearSystemId.identifyDrivetrainSystem(
+            constants.kV_linear,
+            constants.kA_linear,
+            constants.kV_angular,
+            constants.kA_angular,
+        )
+
+        self.drivesim = wpilib.simulation.DifferentialDrivetrainSim(
+            system,
+            # The robot's trackwidth, which is the distance between the wheels on the left side
+            # and those on the right side. The units is meters.
+            constants.kTrackWidth,
+            DCMotor.CIM(10),
+            10.71,
+            # The radius of the drivetrain wheels in meters.
+            constants.kWheelRadius,
         )
         # fmt: on
 
@@ -68,14 +88,26 @@ class PhysicsEngine:
                         time that this function was called
         """
 
+        voltage = wpilib.simulation.RoboRioSim.getVInVoltage()
+
+        # self.l_motor_sim.update(tm_diff)
+
         # Simulate the drivetrain
-        l_motor = self.l_motor.getSpeed()
-        r_motor = self.r_motor.getSpeed()
+        l_motor = self.l_motor.getSpeed() * voltage
+        r_motor = self.r_motor.getSpeed() * voltage
 
-        
+        print(l_motor, r_motor)
 
-        transform = self.drivetrain.calculate(l_motor, r_motor, tm_diff)
-        pose = self.physics_controller.move_robot(transform)
+        self.l_motor_sim.setInputVoltage(l_motor)
+        self.l_motor_sim.update(tm_diff)
+
+        self.drivesim.setInputs(l_motor, r_motor)
+        self.drivesim.update(tm_diff)
+
+        # transform = self.drivesim.calculate(l_motor, r_motor, tm_diff)
+        # pose = self.physics_controller.move_robot(transform)
+        pose = self.drivesim.getPose()
+        self.physics_controller.field.setRobotPose(pose)
 
         # Update the gyro simulation
         # -> FRC gyros are positive clockwise, but the returned pose is positive
