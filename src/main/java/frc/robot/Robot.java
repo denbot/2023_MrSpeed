@@ -135,7 +135,7 @@ private XboxController controller = new XboxController(0);
       double trimOutput = MathUtil.clamp(turn + (Math.abs(Math.signum(forward)) * turnTrim), -1, 1);
 
   
-      drive.arcadeDrive(forward, trimOutput);
+      drive.arcadeDrive(forward, turn);
       // drive.tankDrive(left, right, true);
 
   
