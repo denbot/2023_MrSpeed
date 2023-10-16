@@ -8,10 +8,14 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.command.DriveCommand;
 import frc.robot.command.MobilityPointAutoCommand;
 import frc.robot.subsystems.DriveBase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -21,34 +25,41 @@ import frc.robot.subsystems.DriveBase;
  */
 public class Robot extends TimedRobot {
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
-    private static final String kDefaultAuto = "Default";
-    private static final String kMobileOpen = "Mobility Open Side";
-    private static final String kMobileBump = "Mobility Bump Side";
+    private static final String kMobileOpenBAF = "MOSBAF: Mobility Open Side: Back and Forth";
+    private static final String kMobileBumpBAF = "MBSBAF: Mobility Bump Side: Back and Forth";
+    private static final String kMobileOpenSS = "MOSSSS: Mobility Open Side: Single Shot";
+    private static final String kMobileBumpSS = "MBSSSS: Mobility Bump Side: Single Shot";
 
     private final DriveCommand driveCommand;
-    private final MobilityPointAutoCommand autoOpen;
-    private final MobilityPointAutoCommand autoBump;
 
     DriveBase driveBase;
+
+    private final Map<String, Command> autos;
 
     public Robot() {
         driveBase = new DriveBase();
 
         XboxController controller = new XboxController(0);
         driveCommand = new DriveCommand(driveBase, controller);
-        autoOpen = new MobilityPointAutoCommand(driveBase, 1.1);
-        autoBump = new MobilityPointAutoCommand(driveBase, 1.5);
+
+        autos = new HashMap<>();
+        autos.put(kMobileOpenBAF, new MobilityPointAutoCommand(driveBase, 1.1, true));
+        autos.put(kMobileBumpBAF, new MobilityPointAutoCommand(driveBase, 1.5, true));
+        autos.put(kMobileOpenSS, new MobilityPointAutoCommand(driveBase, 1.1, false));
+        autos.put(kMobileBumpSS, new MobilityPointAutoCommand(driveBase, 1.5, false));
     }
 
-    /**
+    /**sy
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
      */
     @Override
     public void robotInit() {
-        m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-        m_chooser.addOption("Mobility: Open side", kMobileOpen);
-        m_chooser.addOption("Mobility: Bump side", kMobileBump);
+        m_chooser.setDefaultOption("Default Auto", "");
+
+        for (String name : autos.keySet()) {
+            m_chooser.addOption(name, name);
+        }
         SmartDashboard.putData("Auto choices", m_chooser);
 
         driveBase.configMotors();
@@ -82,17 +93,9 @@ public class Robot extends TimedRobot {
         String m_autoSelected = m_chooser.getSelected();
         // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
         System.out.println("Auto selected: " + m_autoSelected);
-        switch (m_autoSelected) {
-            case kMobileOpen:
-                autoOpen.schedule();
-                break;
-            case kMobileBump:
-                autoBump.schedule();
-                break;
-            case kDefaultAuto:
-            default:
-                // Do nothing
-                break;
+        Command autoCommand = autos.get(m_autoSelected);
+        if(autoCommand != null) {
+            autoCommand.schedule();
         }
     }
 
